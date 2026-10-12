@@ -1,6 +1,8 @@
 from Banca import Banca, InvalidAccountError, AccountNotFoundError, SameAccountError, AmountNotAllowedError
 import pytest
 from Conto import Conto, NotEnoughFundsError
+from ContoCorrente import ContoCorrente
+from ContoRisparmio import ContoRisparmio
 
 def test_aggiungi_conto():
     banca = Banca()
@@ -147,3 +149,31 @@ def test_trasferisci_denaro_fondi_insufficienti():
 
     assert conto1.saldo == 500
     assert conto2.saldo == 2000
+
+# Verifica polimorfismo: banca può conservare diversi tipi di conti correnti
+def test_raccolta_conti():
+    conto1 = Conto("005","Mario",2033)
+    conto2 = ContoCorrente("P98","Antonio", 290, 2)
+    conto3 = ContoRisparmio("L34","Angelica", 15000, 3)
+
+    banca = Banca()
+    banca.aggiungi_conto(conto1)
+    banca.aggiungi_conto(conto2)
+    banca.aggiungi_conto(conto3)
+    assert banca.get_conto("005") is conto1
+    assert banca.get_conto("P98") is conto2
+    assert banca.get_conto("L34") is conto3
+
+def test_prelievo_polimorfico():
+    conto1 = Conto("005", "Mario", 1000)
+    conto2 = ContoCorrente("P98", "Antonio", 1000, 2)
+    conto3 = ContoRisparmio("L34", "Angelica", 1000, 3)
+
+    conti = [conto1, conto2, conto3]
+
+    for conto in conti:
+        conto.preleva(100)
+
+    assert conto1.saldo == 900
+    assert conto2.saldo == 898
+    assert conto3.saldo == 900

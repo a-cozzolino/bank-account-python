@@ -56,4 +56,7 @@ class Banca :
         conto1.preleva(somma)
         conto2.deposita(somma)
 
+
+    def get_conti(self):
+        return self.__conti.copy()
     
