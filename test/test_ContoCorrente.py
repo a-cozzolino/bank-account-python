@@ -1,6 +1,6 @@
 import pytest
 from ContoCorrente import ContoCorrente, InvalidCommissionError
-from Conto import InvalidAmountError, NotEnoughFundsError
+from Conto import InvalidAmountError, NotEnoughFundsError, InvalidWithdrawalError
 
 def test_costruttore_invalid_commission_negative():
 
@@ -43,6 +43,24 @@ def test_prelievo_importo_pari_al_saldo_con_commissione():
 
     with pytest.raises(NotEnoughFundsError):
         conto.preleva(1000)
+
+    #verifica anche che il saldo rimanga invariato dopo l'eccezione
+    assert conto.saldo == 1000
+
+def test_prelievo_importo_sfora_con_commissione():
+    conto = ContoCorrente("A93", "Luciano", 999, 2)
+
+    with pytest.raises(NotEnoughFundsError):
+        conto.preleva(998)
+
+    #verifica anche che il saldo rimanga invariato dopo l'eccezione
+    assert conto.saldo == 999
+
+def test_preleva_input_stringa():
+    conto = ContoCorrente("A93", "Luciano", 1000, 2)
+
+    with pytest.raises(InvalidWithdrawalError):
+        conto.preleva("100")
 
     #verifica anche che il saldo rimanga invariato dopo l'eccezione
     assert conto.saldo == 1000

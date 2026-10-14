@@ -64,5 +64,9 @@ for conto in banca.get_conti().values():
     print(f"Il saldo di {conto.id} è {conto.saldo}")
     
 interesse_maturato = conto_risparmio.calcola_interesse()
-conto_risparmio.paga_interessi(interesse_maturato)
+conto_risparmio.paga_interessi()
 print(conto_risparmio.saldo)
+
+print("Ciao ")
+print(0.1+0.2)
+print(0.1+0.2 == 0.3)
