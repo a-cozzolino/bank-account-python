@@ -44,5 +44,12 @@ class ContoCorrente(Conto):
 
         return super().preleva(somma + self.__commissione)
 
+    def to_dict(self):
+        conto_dict = super().to_dict()
+        conto_dict["tipo"] = "conto_corrente"
+        conto_dict["commissione"] = self.commissione
+
+        return conto_dict
+
     
 

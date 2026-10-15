@@ -177,3 +177,34 @@ def test_prelievo_polimorfico():
     assert conto1.saldo == 900
     assert conto2.saldo == 898
     assert conto3.saldo == 900
+
+
+def test_salva_e_carica_conti(tmp_path):
+    banca = Banca()
+    banca.aggiungi_conto(Conto("001", "Alex", 1000))
+    banca.aggiungi_conto(ContoCorrente("002", "Mario", 500, 2))
+    banca.aggiungi_conto(ContoRisparmio("003", "Luigi", 2000, 3))
+
+    banca.salva_su_file(tmp_path)
+
+    banca_caricata = Banca().carica_conti_da_file(tmp_path)
+
+    conti = banca_caricata.get_conti()
+
+    assert len(conti) == 3
+
+    assert type(conti["001"]) is Conto
+    assert type(conti["002"]) is ContoCorrente
+    assert type(conti["003"]) is ContoRisparmio
+
+    assert conti["001"].saldo == 1000
+    assert conti["002"].commissione == 2
+    assert conti["003"].interesse == 3
+
+def test_carica_conti_file_not_found(tmp_path):
+    banca = Banca()
+
+    percorso_inesistente = tmp_path / "cartella_inesistente"
+
+    with pytest.raises(FileNotFoundError):
+        banca.carica_conti_da_file(percorso_inesistente)

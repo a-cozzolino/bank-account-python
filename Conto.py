@@ -87,3 +87,14 @@ class Conto:
         """Restituisce il saldo del conto"""
         return self.__saldo
 
+    def to_dict(self):
+
+        conto_dict = {
+            "tipo": "conto",
+            "id": self.id,
+            "proprietario": self.proprietario,
+            "saldo": self.saldo        
+        }
+
+        return conto_dict
+

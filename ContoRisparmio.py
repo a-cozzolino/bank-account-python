@@ -39,3 +39,10 @@ class ContoRisparmio(Conto):
 
         if interesse_maturato > 0:
             self.deposita(interesse_maturato)
+
+    def to_dict(self):
+        conto_dict = super().to_dict()
+        conto_dict["tipo"] = "conto_risparmio"
+        conto_dict["interesse"] = self.interesse
+
+        return conto_dict
